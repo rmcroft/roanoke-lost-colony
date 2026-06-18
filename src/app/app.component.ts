@@ -2,13 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import {
   IonApp,
-  IonBadge,
   IonContent,
   IonHeader,
   IonIcon,
   IonProgressBar,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -38,6 +35,7 @@ interface NavItem {
 
 interface Theory {
   key: TheoryKey;
+  pickerLabel: string;
   title: string;
   summary: string;
   supports: string[];
@@ -57,13 +55,10 @@ interface QuizQuestion {
   imports: [
     CommonModule,
     IonApp,
-    IonBadge,
     IonContent,
     IonHeader,
     IonIcon,
     IonProgressBar,
-    IonSegment,
-    IonSegmentButton,
     IonTitle,
     IonToolbar
   ],
@@ -113,27 +108,37 @@ export class AppComponent {
     },
     {
       title: 'The First English Voyage',
-      year: '1584',
-      body: 'Philip Amadas and Arthur Barlowe reached the Outer Banks and found Roanoke Island. They met Carolina Algonquian people, including Granganimeo, and returned to England with Manteo and Wanchese, whose visit helped build interest in the colony.'
+      year: 'Apr-Jul 1584',
+      body: 'Philip Amadas and Arthur Barlowe sailed from England in April and reached the Outer Banks in July. They found Roanoke Island, met Carolina Algonquian people, including Granganimeo, and returned to England with Manteo and Wanchese, whose visit helped build interest in the colony.'
     },
     {
       title: 'The Military Colony',
-      year: '1585-1586',
-      body: 'The next expedition brought soldiers and sailors under Sir Richard Grenville and Ralph Lane. Storms damaged ships, food was lost, and the English depended more and more on nearby Native communities. Trust broke down, violence followed, and Lane left with Sir Francis Drake.'
+      year: 'Apr 1585-Jun 1586',
+      body: 'The next expedition brought soldiers and sailors under Sir Richard Grenville and Ralph Lane. Storms damaged ships, food was lost, and the English depended more and more on nearby Native communities. Trust broke down after disease, food shortages, and violence. Lane’s men killed the Secotan leader Wingina, also called Pemisapan, and then left with Sir Francis Drake.'
+    },
+    {
+      title: 'The Fifteen Men Left Behind',
+      year: '1586',
+      body: 'After Lane’s colony left, Grenville returned and found the fort empty. He left a small group of about fifteen soldiers to protect England’s claim. When John White arrived in 1587, the group was gone and only bones were found.'
     },
     {
       title: 'John White’s Colony',
-      year: '1587',
+      year: 'Jul 1587',
       body: 'Raleigh tried again with families instead of only soldiers. John White led 118 men, women, and children. Their intended home was near Chesapeake Bay, but the ship captain left them at Roanoke Island instead.'
     },
     {
+      title: 'A Killing on the Beach',
+      year: 'Jul 1587',
+      body: 'Soon after the new colonists arrived, George Howe was attacked and killed while gathering food near the water. White’s group tried to strike back at the people they thought were responsible, but they attacked Croatoan people by mistake. That made trust even harder.'
+    },
+    {
       title: 'Virginia Dare',
-      year: '1587',
+      year: 'Aug 18, 1587',
       body: 'Virginia Dare was born on August 18, 1587, to Eleanor and Ananias Dare. Her birth showed that Roanoke was meant to be a living community with families, not just a military camp.'
     },
     {
       title: 'John White Leaves',
-      year: '1587',
+      year: 'Late Aug 1587',
       body: 'The colonists needed supplies and help, so White sailed back to England. Before he left, they agreed that if the group moved, they would carve the name of their destination into a tree or post.'
     },
     {
@@ -143,8 +148,13 @@ export class AppComponent {
     },
     {
       title: 'A Mystery Is Born',
-      year: '1590',
+      year: 'Aug 18, 1590',
       body: 'White found the settlement empty. The clues were CRO carved on a tree and CROATOAN carved on a palisade post. He found no distress cross and no clear signs of a fight, but bad weather stopped him from searching Croatoan Island.'
+    },
+    {
+      title: 'A Map Clue Reappears',
+      year: '2012',
+      body: 'Researchers studied John White’s old map with special imaging and noticed a hidden mark near Albemarle Sound. It may point to a possible inland site, sometimes called Site X, but it is still evidence to study, not a final answer.'
     }
   ];
 
@@ -152,58 +162,94 @@ export class AppComponent {
     {
       name: 'John White',
       role: 'Governor and artist',
-      detail: 'Led the 1587 colony, returned to England for supplies, and came back in 1590 to find the settlement abandoned.',
-      badge: 'Witness'
+      detail: 'Led the 1587 colony, returned to England for supplies, and came back in 1590 to find the settlement abandoned.'
     },
     {
       name: 'Virginia Dare',
       role: 'The colony child',
-      detail: 'Born on August 18, 1587, to Eleanor and Ananias Dare. Her later fate is unknown.',
-      badge: 'First'
+      detail: 'Born on August 18, 1587, to Eleanor and Ananias Dare. Her later fate is unknown.'
     },
     {
       name: 'Eleanor Dare',
       role: 'Colonist and mother',
-      detail: 'John White’s daughter and Virginia Dare’s mother, one of the women and families in the 1587 settlement.',
-      badge: 'Family'
+      detail: 'John White’s daughter and Virginia Dare’s mother, one of the women and families in the 1587 settlement.'
+    },
+    {
+      name: 'Ananias Dare',
+      role: 'Colonist and father',
+      detail: 'Eleanor Dare’s husband and Virginia Dare’s father. He was one of the assistants chosen to help govern the 1587 colony.'
     },
     {
       name: 'Manteo',
       role: 'Croatoan diplomat',
-      detail: 'An important Indigenous ally and interpreter who traveled between the Outer Banks and England.',
-      badge: 'Bridge'
+      detail: 'An important Indigenous ally and interpreter who traveled between the Outer Banks and England.'
+    },
+    {
+      name: 'Wanchese',
+      role: 'Roanoke leader',
+      detail: 'Traveled to England with Manteo after the 1584 voyage, but later opposed the English as relationships grew worse.'
+    },
+    {
+      name: 'Sir Walter Raleigh',
+      role: 'Sponsor',
+      detail: 'Received Queen Elizabeth I’s permission to sponsor English colonization, though he did not personally sail to Roanoke.'
+    },
+    {
+      name: 'Ralph Lane',
+      role: '1585 governor',
+      detail: 'Led the first military colony at Roanoke. His colony struggled with food, supplies, and conflict before leaving in 1586.'
+    },
+    {
+      name: 'Sir Richard Grenville',
+      role: 'Expedition leader',
+      detail: 'Commanded the 1585 voyage and later left about fifteen soldiers behind after Lane’s colony had departed.'
+    },
+    {
+      name: 'Simon Fernandes',
+      role: 'Ship captain',
+      detail: 'Captained the 1587 voyage and refused to take White’s colonists farther north to their planned Chesapeake destination.'
+    },
+    {
+      name: 'George Howe',
+      role: 'Colonist',
+      detail: 'Killed soon after the 1587 colonists arrived, an event that helped push English-Native relations toward more violence.'
+    },
+    {
+      name: 'Thomas Harriot',
+      role: 'Scientist and writer',
+      detail: 'Studied the land, plants, and people during the earlier Roanoke voyages and later wrote about Virginia.'
     }
   ];
 
   protected readonly mapPlaces = [
     {
       name: 'England',
-      x: 18,
-      y: 35,
+      x: 82,
+      y: 28,
       caption: 'The voyages began here, shaped by Elizabethan ambition, Atlantic trade, and rivalry with Spain.'
     },
     {
       name: 'Chesapeake Bay',
-      x: 69,
-      y: 42,
+      x: 30,
+      y: 29,
       caption: 'The planned 1587 destination was farther north, near the Chesapeake, but the colonists were left at Roanoke.'
     },
     {
       name: 'Fort Raleigh National Historic Site',
-      x: 77,
-      y: 55,
+      x: 35,
+      y: 46,
       caption: 'Today this NPS site preserves the landscape tied to the English Roanoke ventures.'
     },
     {
       name: 'Roanoke Island',
-      x: 80,
-      y: 61,
+      x: 36,
+      y: 49,
       caption: 'The 1587 colonists lived here before John White returned in 1590 to find the settlement empty.'
     },
     {
       name: 'Croatoan / Hatteras Island',
-      x: 84,
-      y: 70,
+      x: 38,
+      y: 56,
       caption: 'The word CROATOAN pointed toward the Croatoan people and the island now known as Hatteras.'
     }
   ];
@@ -234,20 +280,23 @@ export class AppComponent {
   protected readonly theories: Theory[] = [
     {
       key: 'croatoan',
+      pickerLabel: 'Assimilation',
       title: 'Assimilation with Croatoans',
       summary: 'The colonists moved south and joined, traded with, or were absorbed by Croatoan communities.',
       supports: ['CROATOAN was left as a direct clue.', 'No distress cross was found.', 'Some later artifacts suggest English contact on Hatteras.'],
-      challenges: ['The surviving evidence is fragmentary.', 'Artifacts can travel through trade or later contact.']
+      challenges: ['Only a few pieces of evidence survive.', 'Artifacts can travel through trade or later contact.']
     },
     {
       key: 'chesapeake',
+      pickerLabel: 'Chesapeake',
       title: 'Move to Chesapeake',
       summary: 'The group tried to reach the planned settlement area near Chesapeake Bay.',
-      supports: ['Chesapeake was the intended destination.', 'John White’s map has encouraged modern searches inland.'],
+      supports: ['Chesapeake was the intended destination.', 'John White’s map has encouraged modern searches inland.', 'A hidden mark studied in 2012 may point to an inland place near Albemarle Sound.'],
       challenges: ['White found a clue pointing to Croatoan instead.', 'No universally accepted settlement site has been proven.']
     },
     {
       key: 'starvation',
+      pickerLabel: 'Disease',
       title: 'Disease and Starvation',
       summary: 'Short supplies, illness, drought, and isolation weakened the colony beyond recovery.',
       supports: ['Earlier Roanoke efforts struggled with supplies.', 'White was delayed for three years by war with Spain.'],
@@ -255,6 +304,7 @@ export class AppComponent {
     },
     {
       key: 'attack',
+      pickerLabel: 'Attack',
       title: 'Attack by Other Tribes',
       summary: 'The colonists may have been attacked during regional conflict.',
       supports: ['The first settlement damaged relations with some neighboring communities.', 'Later English reports repeated massacre rumors.'],
@@ -262,6 +312,7 @@ export class AppComponent {
     },
     {
       key: 'spanish',
+      pickerLabel: 'Spanish',
       title: 'Spanish Involvement',
       summary: 'Spain may have discovered or targeted the colony during imperial conflict.',
       supports: ['England and Spain were rivals, and the Armada delayed White.', 'Spanish officials monitored English colonial attempts.'],
@@ -316,7 +367,7 @@ export class AppComponent {
     {
       title: 'National Park Service: 1587 Lost Colony',
       url: 'https://www.nps.gov/fora/learn/historyculture/1587-the-lost-colony.htm',
-      note: 'Used for John White’s family colony, the Chesapeake plan, Virginia Dare, and the agreement to carve a destination.'
+      note: 'Used for John White’s family colony, the Chesapeake plan, Virginia Dare, the earlier garrison, George Howe’s killing, the mistaken Croatoan attack, and the agreement to carve a destination.'
     },
     {
       title: 'National Park Service: 1590 Voyage',
@@ -342,6 +393,11 @@ export class AppComponent {
       title: 'First Colony Foundation: The Roanoke Colonies',
       url: 'https://www.firstcolonyfoundation.org/',
       note: 'Archaeology-focused research organization connected to Roanoke investigations.'
+    },
+    {
+      title: 'The New Yorker: The Earliest American Heroine',
+      url: 'https://www.newyorker.com/news/news-desk/the-earliest-american-heroine',
+      note: 'Used for the modern 2012 John White map clue, British Museum imaging, and Site X context.'
     }
   ];
 

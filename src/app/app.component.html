@@ -51,11 +51,10 @@
         <ng-container *ngSwitchCase="'people'">
           <div class="section-heading">
             <p class="eyebrow">The People</p>
-            <h2>Four faces of Roanoke</h2>
+            <h2>The Faces of Roanoke</h2>
           </div>
           <div class="people-grid">
             <article class="profile-card" *ngFor="let person of people">
-              <ion-badge>{{ person.badge }}</ion-badge>
               <h3>{{ person.name }}</h3>
               <strong>{{ person.role }}</strong>
               <p>{{ person.detail }}</p>
@@ -71,9 +70,17 @@
           <div class="map-card">
             <svg viewBox="0 0 100 72" role="img" aria-label="Simplified Atlantic map with Roanoke locations">
               <path class="ocean" d="M0 0h100v72H0z"></path>
-              <path class="land west" d="M65 8c8 6 15 13 17 23 2 9-1 15 4 26 2 5 8 7 10 15H70c-7-8-8-17-10-28-3-14-8-23 5-36z"></path>
-              <path class="land east" d="M6 6c13 4 20 14 18 25-2 9-8 15-5 26 1 5 5 9 9 15H0V0z"></path>
-              <path class="route" d="M20 36 C39 26, 52 33, 69 43"></path>
+              <path class="land west" d="M0 0h24c2 5 5 9 8 13 3 5 2 10-1 16-3 5-2 10 2 14 4 5 5 10 2 16-2 4-5 8-6 13H0z"></path>
+              <path class="coast" d="M24 0c2 5 5 9 8 13 3 5 2 10-1 16-3 5-2 10 2 14 4 5 5 10 2 16-2 4-5 8-6 13"></path>
+              <path class="chesapeake-shape" d="M26 23c3 1 4 3 3 6-2 3-1 6 2 8"></path>
+              <path class="outer-banks" d="M34 43c3 5 4 11 4 18"></path>
+              <path class="hatteras-hook" d="M38 58c2 2 4 2 6 1"></path>
+              <path class="land east" d="M72 0h28v72H88c-3-6-3-12 0-18 3-7 1-14-3-19-5-6-7-13-6-20-3-2-5-6-7-15z"></path>
+              <path class="england-island" d="M80 20c3-4 8-3 10 1 1 3-1 6-4 8-4 3-8 0-8-4 0-2 1-4 2-5z"></path>
+              <path class="route" d="M82 29 C68 23, 52 25, 36 49"></path>
+              <text x="17" y="14">North America</text>
+              <text x="55" y="38">Atlantic Ocean</text>
+              <text x="76" y="18">England</text>
             </svg>
             <button
               class="pin-button"
@@ -111,11 +118,16 @@
             <p class="eyebrow">The Theories</p>
             <h2>Compare the evidence</h2>
           </div>
-          <ion-segment [value]="selectedTheory()" scrollable="true" (ionChange)="selectTheory($any($event.detail.value))">
-            <ion-segment-button *ngFor="let theory of theories" [value]="theory.key">
-              {{ theory.title.split(' ')[0] }}
-            </ion-segment-button>
-          </ion-segment>
+          <div class="theory-picker" role="list" aria-label="Choose a theory">
+            <button
+              *ngFor="let theory of theories"
+              type="button"
+              [class.active]="selectedTheory() === theory.key"
+              [class.wide]="theory.key === 'attack' || theory.key === 'spanish'"
+              (click)="selectTheory(theory.key)">
+              <span>{{ theory.pickerLabel }}</span>
+            </button>
+          </div>
           <article class="theory-card">
             <h3>{{ activeTheory().title }}</h3>
             <p>{{ activeTheory().summary }}</p>
@@ -206,6 +218,10 @@
             <p class="eyebrow">References</p>
             <h2>Sources used</h2>
           </div>
+          <article class="pronunciation-note">
+            <h3>Pronunciation</h3>
+            <p>Roanoke is pronounced ROH-uh-nohk.</p>
+          </article>
           <article class="reference-card" *ngFor="let reference of references">
             <h3>{{ reference.title }}</h3>
             <p>{{ reference.note }}</p>

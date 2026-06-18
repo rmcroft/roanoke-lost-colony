@@ -29,7 +29,28 @@ ion-toolbar {
 }
 
 .hero.compact {
-  min-height: 34vh;
+  min-height: 168px;
+  padding: 68px 18px 16px;
+  background-position: center 18%;
+}
+
+.hero.compact .hero__shade {
+  background: linear-gradient(180deg, rgba(16, 21, 15, 0.24), #10150f 94%);
+}
+
+.hero.compact h1 {
+  margin-bottom: 0;
+  font-size: 2.2rem;
+  line-height: 0.96;
+}
+
+.hero.compact .subtitle {
+  display: none;
+}
+
+.hero.compact .eyebrow {
+  margin-bottom: 4px;
+  font-size: 0.66rem;
 }
 
 .hero__shade {
@@ -225,11 +246,6 @@ h1 {
   color: #f6c66f;
 }
 
-ion-badge {
-  --background: #6ea6a1;
-  --color: #10150f;
-}
-
 .map-card {
   position: relative;
   margin-bottom: 14px;
@@ -245,6 +261,13 @@ ion-badge {
   height: auto;
 }
 
+.map-card text {
+  fill: rgba(247, 237, 213, 0.72);
+  font-family: inherit;
+  font-size: 3px;
+  font-weight: 800;
+}
+
 .ocean {
   fill: #142128;
 }
@@ -252,6 +275,33 @@ ion-badge {
 .land {
   fill: #354b36;
   opacity: 0.95;
+}
+
+.england-island {
+  fill: #506c46;
+  stroke: rgba(247, 237, 213, 0.62);
+  stroke-width: 0.4;
+}
+
+.coast,
+.outer-banks,
+.chesapeake-shape,
+.hatteras-hook {
+  fill: none;
+  stroke: rgba(247, 237, 213, 0.72);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 0.8;
+}
+
+.outer-banks {
+  stroke: #f6c66f;
+  stroke-width: 0.5;
+}
+
+.hatteras-hook {
+  stroke: #f6c66f;
+  stroke-width: 0.5;
 }
 
 .route {
@@ -294,22 +344,67 @@ ion-badge {
   background: rgba(110, 166, 161, 0.18);
 }
 
-ion-segment {
-  margin-bottom: 14px;
-  --background: rgba(247, 237, 213, 0.08);
-}
-
-ion-segment-button {
-  min-width: 112px;
-  --color: #d9c8a6;
-  --color-checked: #10150f;
-  --indicator-color: #f6c66f;
-}
-
 .evidence-columns {
   display: grid;
   gap: 14px;
   margin: 18px 0;
+}
+
+.theory-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.theory-picker button {
+  display: grid;
+  align-items: center;
+  min-height: 54px;
+  padding: 11px 8px;
+  border: 1px solid rgba(217, 166, 87, 0.32);
+  border-radius: 8px;
+  color: #f7edd5;
+  background: rgba(247, 237, 213, 0.06);
+  font: inherit;
+  text-align: center;
+}
+
+.theory-picker button.active {
+  border-color: #f6c66f;
+  background: rgba(246, 198, 111, 0.18);
+  box-shadow: inset 4px 0 0 #f6c66f;
+}
+
+.theory-picker button.wide {
+  grid-column: span 3;
+}
+
+.theory-picker span {
+  display: block;
+  font-weight: 850;
+  font-size: 0.86rem;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.pronunciation-note {
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(110, 166, 161, 0.36);
+  border-radius: 8px;
+  background: rgba(110, 166, 161, 0.12);
+}
+
+.pronunciation-note h3 {
+  margin: 0 0 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.24rem;
+}
+
+.pronunciation-note p {
+  margin-bottom: 0;
+  color: #ddcdae;
 }
 
 .evidence-columns div {
@@ -491,6 +586,34 @@ ion-progress-bar {
   }
 
   .hero.compact {
-    min-height: 320px;
+    min-height: 190px;
+  }
+
+  .hero.compact h1 {
+    font-size: 2.8rem;
+  }
+}
+
+@media (min-width: 520px) {
+  .theory-picker {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .theory-picker button.wide {
+    grid-column: span 1;
+  }
+}
+
+@media (min-width: 680px) {
+  .theory-picker {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .theory-picker button {
+    grid-column: span 2;
+  }
+
+  .theory-picker button.wide {
+    grid-column: span 3;
   }
 }
