@@ -1,0 +1,33 @@
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+:root {
+  --ion-font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ion-background-color: #10150f;
+  --ion-text-color: #f7edd5;
+  --ion-color-primary: #d9a657;
+  --ion-color-primary-contrast: #111914;
+  --ion-color-secondary: #6ea6a1;
+  --ion-color-tertiary: #b95f48;
+  --ion-toolbar-background: rgba(16, 21, 15, 0.88);
+  --ion-tab-bar-background: rgba(18, 18, 14, 0.96);
+  --ion-tab-bar-color: #bfa36f;
+  --ion-tab-bar-color-selected: #f6c66f;
+}
+
+html,
+body {
+  background: #10150f;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,0 +1,496 @@
+:host {
+  color: #f7edd5;
+}
+
+ion-content {
+  --background: #10150f;
+}
+
+ion-toolbar {
+  --border-color: rgba(246, 198, 111, 0.18);
+  backdrop-filter: blur(18px);
+}
+
+.app-shell {
+  min-height: 100%;
+  padding-bottom: calc(92px + env(safe-area-inset-bottom));
+}
+
+.hero {
+  position: relative;
+  min-height: 86vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 92px 20px 30px;
+  overflow: hidden;
+  background-image: url("/assets/images/roanoke-landing.png");
+  background-position: center top;
+  background-size: cover;
+}
+
+.hero.compact {
+  min-height: 34vh;
+}
+
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(16, 21, 15, 0.16), rgba(16, 21, 15, 0.76) 52%, #10150f 96%),
+    radial-gradient(circle at 72% 18%, rgba(217, 166, 87, 0.28), transparent 30%);
+}
+
+.hero__content {
+  position: relative;
+  width: min(100%, 720px);
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: #f6c66f;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.7rem, 16vw, 5.8rem);
+  line-height: 0.86;
+  letter-spacing: 0;
+  text-shadow: 0 4px 26px rgba(0, 0, 0, 0.62);
+}
+
+.subtitle {
+  max-width: 31rem;
+  color: #f2dfb8;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.quick-card,
+.primary-action,
+.bottom-nav button {
+  appearance: none;
+  font: inherit;
+}
+
+.quick-card {
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(217, 166, 87, 0.42);
+  border-radius: 8px;
+  color: #f7edd5;
+  background: rgba(19, 18, 14, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(247, 237, 213, 0.06);
+}
+
+.quick-card ion-icon {
+  color: #d9a657;
+  font-size: 2rem;
+}
+
+.quick-card span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.04rem;
+  font-weight: 700;
+}
+
+.content-panel {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 24px 18px 0;
+}
+
+.section-heading {
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin-bottom: 8px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  line-height: 1.05;
+}
+
+.section-heading p:not(.eyebrow) {
+  color: #d9c8a6;
+  line-height: 1.48;
+}
+
+.primary-action {
+  width: 100%;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #15160f;
+  background: linear-gradient(135deg, #f6c66f, #b95f48);
+  font-weight: 850;
+}
+
+.timeline-card,
+.profile-card,
+.detail-card,
+.clue-card,
+.theory-card,
+.progress-card,
+.activity-card,
+.reference-card,
+.certificate,
+.trivia-strip article {
+  border: 1px solid rgba(217, 166, 87, 0.28);
+  border-radius: 8px;
+  background: rgba(24, 25, 18, 0.88);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+}
+
+.timeline-card,
+.profile-card,
+.detail-card,
+.theory-card,
+.progress-card,
+.activity-card,
+.reference-card,
+.certificate {
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.timeline-card span,
+.clue-card span,
+.progress-card span {
+  color: #6ea6a1;
+  font-weight: 850;
+}
+
+.timeline-card h3,
+.profile-card h3,
+.detail-card h3,
+.clue-card h3,
+.theory-card h3,
+.activity-card h3,
+.reference-card h3,
+.certificate h3 {
+  margin: 8px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.34rem;
+}
+
+.timeline-card p,
+.profile-card p,
+.detail-card p,
+.clue-card p,
+.theory-card p,
+.activity-card p,
+.reference-card p,
+.certificate p {
+  margin-bottom: 0;
+  color: #ddcdae;
+  line-height: 1.48;
+}
+
+.people-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-card strong {
+  color: #f6c66f;
+}
+
+ion-badge {
+  --background: #6ea6a1;
+  --color: #10150f;
+}
+
+.map-card {
+  position: relative;
+  margin-bottom: 14px;
+  border: 1px solid rgba(110, 166, 161, 0.34);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #142128;
+}
+
+.map-card svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ocean {
+  fill: #142128;
+}
+
+.land {
+  fill: #354b36;
+  opacity: 0.95;
+}
+
+.route {
+  fill: none;
+  stroke: #d9a657;
+  stroke-width: 0.7;
+  stroke-dasharray: 2 2;
+}
+
+.pin-button {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  transform: translate(-50%, -50%);
+  border: 3px solid #10150f;
+  border-radius: 50%;
+  background: #f6c66f;
+  box-shadow: 0 0 0 4px rgba(246, 198, 111, 0.2);
+}
+
+.pin-button.active {
+  background: #b95f48;
+  box-shadow: 0 0 0 5px rgba(185, 95, 72, 0.28);
+}
+
+.clue-card {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.clue-card span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(110, 166, 161, 0.18);
+}
+
+ion-segment {
+  margin-bottom: 14px;
+  --background: rgba(247, 237, 213, 0.08);
+}
+
+ion-segment-button {
+  min-width: 112px;
+  --color: #d9c8a6;
+  --color-checked: #10150f;
+  --indicator-color: #f6c66f;
+}
+
+.evidence-columns {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.evidence-columns div {
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(247, 237, 213, 0.06);
+}
+
+.evidence-columns h4 {
+  margin-bottom: 8px;
+  color: #f6c66f;
+  font-size: 0.92rem;
+}
+
+.progress-card div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+ion-progress-bar {
+  --background: rgba(247, 237, 213, 0.12);
+  --progress-background: #f6c66f;
+}
+
+.activity-card {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 1px solid rgba(217, 166, 87, 0.28);
+  color: inherit;
+  text-align: left;
+  appearance: none;
+  font: inherit;
+}
+
+.activity-card > ion-icon:first-child,
+.certificate ion-icon {
+  color: #f6c66f;
+  font-size: 1.7rem;
+}
+
+.activity-card:active {
+  transform: translateY(1px);
+}
+
+.activity-check {
+  color: #6ea6a1;
+  font-size: 1.55rem;
+}
+
+.quiz-launch {
+  margin: 8px 0 14px;
+}
+
+.locked-quiz,
+.quiz-card,
+.quiz-result {
+  padding: 18px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(217, 166, 87, 0.28);
+  border-radius: 8px;
+  background: rgba(24, 25, 18, 0.88);
+}
+
+.locked-quiz h3,
+.quiz-card h3,
+.quiz-result h3 {
+  margin: 8px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.24rem;
+}
+
+.locked-quiz p,
+.quiz-result p {
+  margin-bottom: 0;
+  color: #ddcdae;
+}
+
+.quiz-card span {
+  color: #6ea6a1;
+  font-weight: 850;
+}
+
+.quiz-choices {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.quiz-choices button {
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(217, 166, 87, 0.3);
+  border-radius: 8px;
+  color: #f7edd5;
+  background: rgba(247, 237, 213, 0.06);
+  font: inherit;
+  text-align: left;
+}
+
+.quiz-choices button.selected {
+  border-color: #f6c66f;
+  color: #10150f;
+  background: #f6c66f;
+  font-weight: 850;
+}
+
+.primary-action[disabled] {
+  opacity: 0.5;
+}
+
+.certificate {
+  text-align: center;
+  border-color: rgba(246, 198, 111, 0.58);
+}
+
+.reference-card a {
+  display: block;
+  margin-top: 10px;
+  color: #8ed0c9;
+  overflow-wrap: anywhere;
+}
+
+.bottom-nav {
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(217, 166, 87, 0.18);
+  background: rgba(18, 18, 14, 0.96);
+  backdrop-filter: blur(18px);
+}
+
+.bottom-nav button {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  border: 0;
+  color: #bfa36f;
+  background: transparent;
+}
+
+.bottom-nav button.active {
+  color: #f6c66f;
+}
+
+.bottom-nav ion-icon {
+  font-size: 1.32rem;
+}
+
+.bottom-nav span {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 680px) {
+  .quick-grid,
+  .people-grid,
+  .evidence-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero {
+    min-height: 760px;
+  }
+
+  .hero.compact {
+    min-height: 320px;
+  }
+}

@@ -1,0 +1,225 @@
+<ion-app>
+  <ion-header translucent="true">
+    <ion-toolbar>
+      <ion-title>Roanoke Island</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content fullscreen="true">
+    <main class="app-shell">
+      <section class="hero" [class.compact]="activeSection() !== 'home'">
+        <div class="hero__shade"></div>
+        <div class="hero__content">
+          <p class="eyebrow">Junior mystery guide</p>
+          <h1>Roanoke Island</h1>
+          <p class="subtitle">Explore the story, clues, people, places, and theories behind the Lost Colony.</p>
+
+          <div class="quick-grid" *ngIf="activeSection() === 'home'">
+            <button class="quick-card" *ngFor="let item of quickActions" type="button" (click)="setSection(item.id)">
+              <ion-icon [name]="item.icon"></ion-icon>
+              <span>{{ item.label }}</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-panel" [ngSwitch]="activeSection()">
+        <ng-container *ngSwitchCase="'home'">
+          <div class="section-heading">
+            <p class="eyebrow">Start the investigation</p>
+            <h2>What do you think happened?</h2>
+            <p>Review the evidence, compare theories, and cast your vote when you have a case.</p>
+          </div>
+          <button class="primary-action" type="button" (click)="setSection('theories')">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            Build Your Theory
+          </button>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'story'">
+          <div class="section-heading">
+            <p class="eyebrow">The Story</p>
+            <h2>From ambition to mystery</h2>
+          </div>
+          <article class="timeline-card" *ngFor="let card of storyCards">
+            <span>{{ card.year }}</span>
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.body }}</p>
+          </article>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'people'">
+          <div class="section-heading">
+            <p class="eyebrow">The People</p>
+            <h2>Four faces of Roanoke</h2>
+          </div>
+          <div class="people-grid">
+            <article class="profile-card" *ngFor="let person of people">
+              <ion-badge>{{ person.badge }}</ion-badge>
+              <h3>{{ person.name }}</h3>
+              <strong>{{ person.role }}</strong>
+              <p>{{ person.detail }}</p>
+            </article>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'map'">
+          <div class="section-heading">
+            <p class="eyebrow">Interactive Map</p>
+            <h2>Tap a location</h2>
+          </div>
+          <div class="map-card">
+            <svg viewBox="0 0 100 72" role="img" aria-label="Simplified Atlantic map with Roanoke locations">
+              <path class="ocean" d="M0 0h100v72H0z"></path>
+              <path class="land west" d="M65 8c8 6 15 13 17 23 2 9-1 15 4 26 2 5 8 7 10 15H70c-7-8-8-17-10-28-3-14-8-23 5-36z"></path>
+              <path class="land east" d="M6 6c13 4 20 14 18 25-2 9-8 15-5 26 1 5 5 9 9 15H0V0z"></path>
+              <path class="route" d="M20 36 C39 26, 52 33, 69 43"></path>
+            </svg>
+            <button
+              class="pin-button"
+              *ngFor="let place of mapPlaces"
+              type="button"
+              [class.active]="selectedMapPlace() === place.name"
+              [style.left.%]="place.x"
+              [style.top.%]="place.y"
+              (click)="chooseMapPlace(place.name)"
+              [attr.aria-label]="place.name">
+            </button>
+          </div>
+          <article class="detail-card">
+            <h3>{{ currentPlace().name }}</h3>
+            <p>{{ currentPlace().caption }}</p>
+          </article>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'clues'">
+          <div class="section-heading">
+            <p class="eyebrow">The Clues</p>
+            <h2>Evidence left behind</h2>
+          </div>
+          <article class="clue-card" *ngFor="let clue of clues; index as i">
+            <span>{{ i + 1 }}</span>
+            <div>
+              <h3>{{ clue.title }}</h3>
+              <p>{{ clue.body }}</p>
+            </div>
+          </article>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'theories'">
+          <div class="section-heading">
+            <p class="eyebrow">The Theories</p>
+            <h2>Compare the evidence</h2>
+          </div>
+          <ion-segment [value]="selectedTheory()" scrollable="true" (ionChange)="selectTheory($any($event.detail.value))">
+            <ion-segment-button *ngFor="let theory of theories" [value]="theory.key">
+              {{ theory.title.split(' ')[0] }}
+            </ion-segment-button>
+          </ion-segment>
+          <article class="theory-card">
+            <h3>{{ activeTheory().title }}</h3>
+            <p>{{ activeTheory().summary }}</p>
+            <div class="evidence-columns">
+              <div>
+                <h4>Evidence For</h4>
+                <p *ngFor="let item of activeTheory().supports">{{ item }}</p>
+              </div>
+              <div>
+                <h4>Questions</h4>
+                <p *ngFor="let item of activeTheory().challenges">{{ item }}</p>
+              </div>
+            </div>
+            <button class="primary-action" type="button" (click)="castVote(activeTheory().key)">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+              {{ vote() === activeTheory().key ? 'Your Current Vote' : 'Vote for This Theory' }}
+            </button>
+          </article>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'junior'">
+          <div class="section-heading">
+            <p class="eyebrow">Kid Mode</p>
+            <h2>Junior Historian</h2>
+            <p>Complete the activities, take the quiz, and earn your Lost Colony Investigator certificate.</p>
+          </div>
+          <div class="progress-card">
+            <div>
+              <span>Badge progress</span>
+              <strong>{{ completedActivities().length }} / {{ activities.length }}</strong>
+            </div>
+            <ion-progress-bar [value]="juniorProgress()"></ion-progress-bar>
+          </div>
+          <button class="activity-card" *ngFor="let activity of activities" type="button" (click)="setSection(activity.section)">
+            <ion-icon [name]="isComplete(activity.id) ? 'trophy-outline' : 'ribbon-outline'"></ion-icon>
+            <div>
+              <h3>{{ activity.badge }}</h3>
+              <p>{{ activity.label }}</p>
+            </div>
+            <ion-icon class="activity-check" *ngIf="isComplete(activity.id)" name="checkmark-circle-outline" aria-label="Complete"></ion-icon>
+          </button>
+          <button class="primary-action quiz-launch" *ngIf="allActivitiesComplete() && !quizPassed()" type="button" (click)="setSection('quiz')">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            Take the Quiz
+          </button>
+          <article class="locked-quiz" *ngIf="!allActivitiesComplete()">
+            <h3>Quiz locked</h3>
+            <p>Finish the four activities above to unlock the certificate quiz.</p>
+          </article>
+          <div class="certificate" *ngIf="quizPassed()">
+            <ion-icon name="trophy-outline"></ion-icon>
+            <h3>Lost Colony Investigator</h3>
+            <p>Certificate earned. You completed the activities and passed the quiz.</p>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'quiz'">
+          <div class="section-heading">
+            <p class="eyebrow">Final Quiz</p>
+            <h2>Earn your certificate</h2>
+            <p>Answer all three questions correctly to become a Lost Colony Investigator.</p>
+          </div>
+          <article class="quiz-card" *ngFor="let question of quizQuestions; index as i">
+            <span>Question {{ i + 1 }}</span>
+            <h3>{{ question.prompt }}</h3>
+            <div class="quiz-choices">
+              <button
+                *ngFor="let choice of question.choices"
+                type="button"
+                [class.selected]="isQuizChoiceSelected(question.id, choice)"
+                (click)="answerQuiz(question.id, choice)">
+                {{ choice }}
+              </button>
+            </div>
+          </article>
+          <button class="primary-action" type="button" [disabled]="!canSubmitQuiz()" (click)="submitQuiz()">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            Check My Answers
+          </button>
+          <article class="quiz-result" *ngIf="quizSubmitted() && !quizPassed()">
+            <h3>{{ quizScore() }} / {{ quizQuestions.length }} correct</h3>
+            <p>Almost there. Try again and look back at the clues if you need help.</p>
+          </article>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'references'">
+          <div class="section-heading">
+            <p class="eyebrow">References</p>
+            <h2>Sources used</h2>
+          </div>
+          <article class="reference-card" *ngFor="let reference of references">
+            <h3>{{ reference.title }}</h3>
+            <p>{{ reference.note }}</p>
+            <a [href]="reference.url" target="_blank" rel="noreferrer">{{ reference.url }}</a>
+          </article>
+        </ng-container>
+      </section>
+    </main>
+  </ion-content>
+
+  <nav class="bottom-nav" aria-label="Primary">
+    <button *ngFor="let item of navItems" type="button" [class.active]="activeSection() === item.id" (click)="setSection(item.id)">
+      <ion-icon [name]="item.icon"></ion-icon>
+      <span>{{ item.label }}</span>
+    </button>
+  </nav>
+</ion-app>

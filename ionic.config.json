@@ -1,0 +1,7 @@
+{
+  "name": "Roanoke Island",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
