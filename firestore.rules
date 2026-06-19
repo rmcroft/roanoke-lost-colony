@@ -1,0 +1,72 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function validChoice(choice) {
+      return choice in ['croatoan', 'chesapeake', 'starvation', 'attack', 'spanish'];
+    }
+
+    function votePath() {
+      return /databases/$(database)/documents/theoryVotes/$(request.auth.uid);
+    }
+
+    function tallyPath(choice) {
+      return /databases/$(database)/documents/theoryVoteTallies/$(choice);
+    }
+
+    function oldChoice() {
+      return exists(votePath()) ? get(votePath()).data.choice : '';
+    }
+
+    function newChoice() {
+      return getAfter(votePath()).data.choice;
+    }
+
+    function oldTally(choice) {
+      return exists(tallyPath(choice)) ? get(tallyPath(choice)).data.count : 0;
+    }
+
+    function newTally(choice) {
+      return getAfter(tallyPath(choice)).data.count;
+    }
+
+    match /theoryVotes/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['choice', 'updatedAt'])
+        && validChoice(request.resource.data.choice)
+        && request.resource.data.updatedAt == request.time
+        && newTally(request.resource.data.choice) == oldTally(request.resource.data.choice) + 1;
+
+      allow update, delete: if false;
+    }
+
+    match /theoryVoteTallies/{choice} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && validChoice(choice)
+        && request.resource.data.keys().hasOnly(['count'])
+        && request.resource.data.count == 1
+        && oldChoice() != choice
+        && newChoice() == choice;
+
+      allow update: if signedIn()
+        && validChoice(choice)
+        && request.resource.data.keys().hasOnly(['count'])
+        && request.resource.data.count is int
+        && request.resource.data.count >= 0
+        && oldChoice() != choice
+        && newChoice() == choice
+        && request.resource.data.count == resource.data.count + 1;
+
+      allow delete: if false;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, OnDestroy, signal } from '@angular/core';
 import {
   IonApp,
   IonContent,
@@ -23,9 +23,16 @@ import {
   trailSignOutline,
   trophyOutline
 } from 'ionicons/icons';
+import {
+  castTheoryVote,
+  emptyTheoryVoteResults,
+  observeTheoryVotes,
+  TheoryKey,
+  theoryVotingErrorMessage,
+  TheoryVoteResults
+} from './theory-voting';
 
 type SectionId = 'home' | 'story' | 'people' | 'map' | 'clues' | 'theories' | 'junior' | 'quiz' | 'references';
-type TheoryKey = 'croatoan' | 'chesapeake' | 'starvation' | 'attack' | 'spanish';
 
 interface NavItem {
   id: SectionId;
@@ -65,16 +72,20 @@ interface QuizQuestion {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   protected readonly activeSection = signal<SectionId>(this.readInitialSection());
   protected readonly selectedMapPlace = signal('Roanoke Island');
   protected readonly selectedTheory = signal<TheoryKey>('croatoan');
-  protected readonly vote = signal<TheoryKey | null>(this.readTheoryVote());
+  protected readonly vote = signal<TheoryKey | null>(null);
+  protected readonly voteResults = signal<TheoryVoteResults>(emptyTheoryVoteResults());
+  protected readonly votePending = signal(false);
+  protected readonly voteError = signal('');
   protected readonly completedActivities = signal<string[]>(this.readCompletedActivities());
   protected readonly viewedMapPlaces = signal<string[]>([]);
   protected readonly quizAnswers = signal<Record<string, string>>({});
   protected readonly quizPassed = signal(this.readQuizPassed());
   protected readonly quizSubmitted = signal(false);
+  private stopObservingVotes?: () => void;
 
   protected readonly navItems: NavItem[] = [
     { id: 'home', label: 'Home', icon: 'compass-outline' },
@@ -399,6 +410,10 @@ export class AppComponent {
     return this.theories.find((theory) => theory.key === this.selectedTheory()) ?? this.theories[0];
   });
 
+  protected readonly totalVotes = computed(() => {
+    return Object.values(this.voteResults()).reduce((total, count) => total + count, 0);
+  });
+
   protected readonly currentPlace = computed(() => {
     return this.mapPlaces.find((place) => place.name === this.selectedMapPlace()) ?? this.mapPlaces[2];
   });
@@ -424,6 +439,12 @@ export class AppComponent {
       trailSignOutline,
       trophyOutline
     });
+
+    void this.initializeVoting();
+  }
+
+  ngOnDestroy(): void {
+    this.stopObservingVotes?.();
   }
 
   protected setSection(section: SectionId): void {
@@ -450,10 +471,31 @@ export class AppComponent {
     this.selectedTheory.set(key);
   }
 
-  protected castVote(key: TheoryKey): void {
-    this.vote.set(key);
-    localStorage.setItem('roanoke-theory-vote', key);
-    this.completeActivity('badge-vote');
+  protected async castVote(key: TheoryKey): Promise<void> {
+    if (this.votePending() || this.vote()) {
+      return;
+    }
+
+    this.votePending.set(true);
+    this.voteError.set('');
+    try {
+      await castTheoryVote(key);
+      this.completeActivity('badge-vote');
+    } catch (error) {
+      console.error('Unable to save theory vote', error);
+      this.voteError.set(theoryVotingErrorMessage(error));
+    } finally {
+      this.votePending.set(false);
+    }
+  }
+
+  protected voteCount(key: TheoryKey): number {
+    return this.voteResults()[key];
+  }
+
+  protected votePercentage(key: TheoryKey): number {
+    const total = this.totalVotes();
+    return total ? Math.round((this.voteCount(key) / total) * 100) : 0;
   }
 
   protected completeActivity(id: string): void {
@@ -496,9 +538,20 @@ export class AppComponent {
     return this.quizQuestions.every((question) => Boolean(this.quizAnswers()[question.id]));
   }
 
-  private readTheoryVote(): TheoryKey | null {
-    const value = localStorage.getItem('roanoke-theory-vote') as TheoryKey | null;
-    return value && ['croatoan', 'chesapeake', 'starvation', 'attack', 'spanish'].includes(value) ? value : null;
+  private async initializeVoting(): Promise<void> {
+    try {
+      this.stopObservingVotes = await observeTheoryVotes(
+        (vote) => this.vote.set(vote),
+        (results) => this.voteResults.set(results),
+        (error) => {
+          console.error('Unable to load theory votes', error);
+          this.voteError.set(theoryVotingErrorMessage(error));
+        }
+      );
+    } catch (error) {
+      console.error('Unable to initialize theory voting', error);
+      this.voteError.set(theoryVotingErrorMessage(error));
+    }
   }
 
   private readQuizPassed(): boolean {

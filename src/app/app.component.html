@@ -147,10 +147,30 @@
                 <p *ngFor="let item of activeTheory().challenges">{{ item }}</p>
               </div>
             </div>
-            <button class="primary-action" type="button" (click)="castVote(activeTheory().key)">
+            <button class="primary-action" type="button" [disabled]="votePending() || !!vote()" (click)="castVote(activeTheory().key)">
               <ion-icon name="checkmark-circle-outline"></ion-icon>
-              {{ vote() === activeTheory().key ? 'Your Current Vote' : 'Vote for This Theory' }}
+              {{ votePending() ? 'Saving Vote...' : vote() ? 'Vote Recorded' : 'Vote for This Theory' }}
             </button>
+            <p class="vote-error" *ngIf="voteError()" role="alert">{{ voteError() }}</p>
+          </article>
+          <article class="vote-results" *ngIf="vote()">
+            <div class="vote-results-heading">
+              <div>
+                <p class="eyebrow">Poll Results</p>
+                <h3>Community Votes</h3>
+              </div>
+              <strong>{{ totalVotes() }} {{ totalVotes() === 1 ? 'vote' : 'votes' }}</strong>
+            </div>
+            <div class="vote-result-row" *ngFor="let theory of theories">
+              <div class="vote-result-label">
+                <span>{{ theory.pickerLabel }}</span>
+                <strong>{{ votePercentage(theory.key) }}%</strong>
+              </div>
+              <div class="vote-result-track" role="progressbar" [attr.aria-label]="theory.title + ' votes'" [attr.aria-valuenow]="votePercentage(theory.key)" aria-valuemin="0" aria-valuemax="100">
+                <span [style.width.%]="votePercentage(theory.key)"></span>
+              </div>
+              <small>{{ voteCount(theory.key) }} {{ voteCount(theory.key) === 1 ? 'vote' : 'votes' }}</small>
+            </div>
           </article>
         </ng-container>
 

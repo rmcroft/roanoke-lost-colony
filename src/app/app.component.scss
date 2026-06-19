@@ -402,6 +402,74 @@ h1 {
   overflow-wrap: anywhere;
 }
 
+.vote-results {
+  padding: 18px;
+  margin-top: 14px;
+  border: 1px solid rgba(110, 166, 161, 0.36);
+  border-radius: 8px;
+  background: rgba(110, 166, 161, 0.1);
+}
+
+.vote-results-heading,
+.vote-result-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vote-results-heading {
+  margin-bottom: 18px;
+}
+
+.vote-results-heading h3,
+.vote-results-heading p {
+  margin: 0;
+}
+
+.vote-results-heading h3 {
+  margin-top: 3px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.24rem;
+}
+
+.vote-results-heading > strong {
+  color: #f6c66f;
+  white-space: nowrap;
+}
+
+.vote-result-row + .vote-result-row {
+  margin-top: 13px;
+}
+
+.vote-result-label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+.vote-result-track {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(247, 237, 213, 0.12);
+}
+
+.vote-result-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6ea6a1, #f6c66f);
+  transition: width 180ms ease;
+}
+
+.vote-result-row small {
+  display: block;
+  margin-top: 4px;
+  color: #bfae91;
+  font-size: 0.74rem;
+  text-align: right;
+}
+
 .pronunciation-note {
   padding: 18px;
   margin-bottom: 14px;
@@ -606,4 +674,9 @@ ion-progress-bar {
   .hero.compact h1 {
     font-size: 2.8rem;
   }
+}
+.vote-error {
+  color: #8b2d2d;
+  margin: 0.75rem 0 0;
+  text-align: center;
 }
