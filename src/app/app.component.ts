@@ -66,7 +66,7 @@ interface QuizQuestion {
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  protected readonly activeSection = signal<SectionId>('home');
+  protected readonly activeSection = signal<SectionId>(this.readInitialSection());
   protected readonly selectedMapPlace = signal('Roanoke Island');
   protected readonly selectedTheory = signal<TheoryKey>('croatoan');
   protected readonly vote = signal<TheoryKey | null>(this.readTheoryVote());
@@ -92,7 +92,7 @@ export class AppComponent {
     { id: 'map', label: 'Explore', icon: 'compass-outline' },
     { id: 'clues', label: 'The Clues', icon: 'search-outline' },
     { id: 'theories', label: 'Theories', icon: 'sparkles-outline' },
-    { id: 'junior', label: 'Kid Mode', icon: 'ribbon-outline' }
+    { id: 'junior', label: 'Jr Historian', icon: 'ribbon-outline' }
   ];
 
   protected readonly storyCards = [
@@ -224,32 +224,26 @@ export class AppComponent {
   protected readonly mapPlaces = [
     {
       name: 'England',
-      x: 82,
-      y: 28,
+      x: 79,
+      y: 29,
       caption: 'The voyages began here, shaped by Elizabethan ambition, Atlantic trade, and rivalry with Spain.'
     },
     {
       name: 'Chesapeake Bay',
-      x: 30,
-      y: 29,
+      x: 18,
+      y: 36,
       caption: 'The planned 1587 destination was farther north, near the Chesapeake, but the colonists were left at Roanoke.'
     },
     {
-      name: 'Fort Raleigh National Historic Site',
-      x: 35,
-      y: 46,
-      caption: 'Today this NPS site preserves the landscape tied to the English Roanoke ventures.'
-    },
-    {
-      name: 'Roanoke Island',
-      x: 36,
-      y: 49,
-      caption: 'The 1587 colonists lived here before John White returned in 1590 to find the settlement empty.'
+      name: 'Roanoke Island / Fort Raleigh',
+      x: 27,
+      y: 55,
+      caption: 'The 1587 colonists lived on Roanoke Island. Today Fort Raleigh National Historic Site preserves the landscape tied to the English Roanoke ventures.'
     },
     {
       name: 'Croatoan / Hatteras Island',
-      x: 38,
-      y: 56,
+      x: 29,
+      y: 67,
       caption: 'The word CROATOAN pointed toward the Croatoan people and the island now known as Hatteras.'
     }
   ];
@@ -518,5 +512,12 @@ export class AppComponent {
     } catch {
       return [];
     }
+  }
+
+  private readInitialSection(): SectionId {
+    const previewSection = new URLSearchParams(window.location.search).get('preview');
+    const validSections: SectionId[] = ['home', 'story', 'people', 'map', 'clues', 'theories', 'junior', 'quiz', 'references'];
+
+    return validSections.includes(previewSection as SectionId) ? previewSection as SectionId : 'home';
   }
 }

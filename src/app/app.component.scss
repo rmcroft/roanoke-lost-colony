@@ -127,6 +127,7 @@ h1 {
   color: #f7edd5;
   background: rgba(19, 18, 14, 0.78);
   box-shadow: inset 0 0 0 1px rgba(247, 237, 213, 0.06);
+  text-align: left;
 }
 
 .quick-card ion-icon {
@@ -135,9 +136,11 @@ h1 {
 }
 
 .quick-card span {
+  width: 100%;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.04rem;
   font-weight: 700;
+  text-align: left;
 }
 
 .content-panel {
@@ -277,16 +280,26 @@ h1 {
   opacity: 0.95;
 }
 
-.england-island {
+.england-island,
+.ireland-island,
+.scotland-island {
   fill: #506c46;
   stroke: rgba(247, 237, 213, 0.62);
   stroke-width: 0.4;
 }
 
+.england-island,
+.scotland-island {
+  fill: #5d784d;
+}
+
 .coast,
+.europe-coast,
 .outer-banks,
 .chesapeake-shape,
-.hatteras-hook {
+.hatteras-hook,
+.albemarle,
+.pamlico {
   fill: none;
   stroke: rgba(247, 237, 213, 0.72);
   stroke-linecap: round;
@@ -352,12 +365,13 @@ h1 {
 
 .theory-picker {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 14px;
 }
 
 .theory-picker button {
+  grid-column: span 2;
   display: grid;
   align-items: center;
   min-height: 54px;
@@ -591,29 +605,5 @@ ion-progress-bar {
 
   .hero.compact h1 {
     font-size: 2.8rem;
-  }
-}
-
-@media (min-width: 520px) {
-  .theory-picker {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .theory-picker button.wide {
-    grid-column: span 1;
-  }
-}
-
-@media (min-width: 680px) {
-  .theory-picker {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-
-  .theory-picker button {
-    grid-column: span 2;
-  }
-
-  .theory-picker button.wide {
-    grid-column: span 3;
   }
 }
