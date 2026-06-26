@@ -410,9 +410,12 @@ export class AppComponent implements OnDestroy {
     return this.theories.find((theory) => theory.key === this.selectedTheory()) ?? this.theories[0];
   });
 
-  protected readonly totalVotes = computed(() => {
-    return Object.values(this.voteResults()).reduce((total, count) => total + count, 0);
-  });
+  protected readonly totalVotes = computed(() =>
+  Object.values(this.voteResults()).reduce(
+    (total, count) => total + count,
+    0
+  )
+);
 
   protected readonly currentPlace = computed(() => {
     return this.mapPlaces.find((place) => place.name === this.selectedMapPlace()) ?? this.mapPlaces[2];
@@ -472,7 +475,7 @@ export class AppComponent implements OnDestroy {
   }
 
   protected async castVote(key: TheoryKey): Promise<void> {
-    if (this.votePending() || this.vote()) {
+    if (this.votePending()) {
       return;
     }
 

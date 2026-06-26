@@ -1,4 +1,3 @@
-import { getAnalytics, isSupported } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -16,12 +15,3 @@ const firebaseConfig = {
 export const firebaseApp = initializeApp(firebaseConfig);
 export const firebaseAuth = getAuth(firebaseApp);
 export const firestore = getFirestore(firebaseApp);
-
-// Analytics is unavailable in some native WebViews and privacy-restricted browsers.
-void isSupported().then((supported) => {
-  if (supported) {
-    getAnalytics(firebaseApp);
-  }
-}).catch(() => {
-  // Firebase services remain available when Analytics cannot initialize.
-});

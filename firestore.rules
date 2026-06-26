@@ -10,6 +10,11 @@ service cloud.firestore {
       return choice in ['croatoan', 'chesapeake', 'starvation', 'attack', 'spanish'];
     }
 
+    function validUpdatedAt() {
+      return request.resource.data.updatedAt == request.time
+        || request.resource.data.updatedAt is number;
+    }
+
     function votePath() {
       return /databases/$(database)/documents/theoryVotes/$(request.auth.uid);
     }
@@ -41,10 +46,19 @@ service cloud.firestore {
         && request.auth.uid == userId
         && request.resource.data.keys().hasOnly(['choice', 'updatedAt'])
         && validChoice(request.resource.data.choice)
-        && request.resource.data.updatedAt == request.time
+        && validUpdatedAt()
         && newTally(request.resource.data.choice) == oldTally(request.resource.data.choice) + 1;
 
-      allow update, delete: if false;
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['choice', 'updatedAt'])
+        && validChoice(request.resource.data.choice)
+        && validUpdatedAt()
+        && resource.data.choice != request.resource.data.choice
+        && newTally(resource.data.choice) == oldTally(resource.data.choice) - 1
+        && newTally(request.resource.data.choice) == oldTally(request.resource.data.choice) + 1;
+
+      allow delete: if false;
     }
 
     match /theoryVoteTallies/{choice} {
@@ -60,11 +74,15 @@ service cloud.firestore {
       allow update: if signedIn()
         && validChoice(choice)
         && request.resource.data.keys().hasOnly(['count'])
-        && request.resource.data.count is int
+        && request.resource.data.count is number
         && request.resource.data.count >= 0
-        && oldChoice() != choice
-        && newChoice() == choice
-        && request.resource.data.count == resource.data.count + 1;
+        && (
+          (oldChoice() != choice && newChoice() == choice
+            && request.resource.data.count == resource.data.count + 1)
+          ||
+          (oldChoice() == choice && newChoice() != choice
+            && request.resource.data.count == resource.data.count - 1)
+        );
 
       allow delete: if false;
     }

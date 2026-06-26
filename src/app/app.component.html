@@ -32,7 +32,7 @@
           </div>
           <button class="primary-action" type="button" (click)="setSection('theories')">
             <ion-icon name="shield-checkmark-outline"></ion-icon>
-            Build Your Theory
+            Cast your vote
           </button>
         </ng-container>
 
@@ -147,9 +147,9 @@
                 <p *ngFor="let item of activeTheory().challenges">{{ item }}</p>
               </div>
             </div>
-            <button class="primary-action" type="button" [disabled]="votePending() || !!vote()" (click)="castVote(activeTheory().key)">
+            <button class="primary-action" type="button" [disabled]="votePending()" (click)="castVote(activeTheory().key)">
               <ion-icon name="checkmark-circle-outline"></ion-icon>
-              {{ votePending() ? 'Saving Vote...' : vote() ? 'Vote Recorded' : 'Vote for This Theory' }}
+              {{ votePending() ? 'Saving Vote...' : vote() === activeTheory().key ? 'Your Current Vote' : vote() ? 'Change Vote to This Theory' : 'Vote for This Theory' }}
             </button>
             <p class="vote-error" *ngIf="voteError()" role="alert">{{ voteError() }}</p>
           </article>
